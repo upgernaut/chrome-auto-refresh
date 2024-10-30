@@ -17,14 +17,16 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 });
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+
+// Stop refreshing if entering another website (if needed)
+/*chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url !== activeUrl) {
     stopRefreshing();
     await clearData();
     chrome.action.setBadgeBackgroundColor({ color: "#FF0000" }); // Set badge color to red
     chrome.action.setBadgeText({ text: "Off" });
   }
-});
+})*/;
 
 function startRefreshing(tabId) {
   if (refreshInterval) return;
