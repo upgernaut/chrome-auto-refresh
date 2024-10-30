@@ -3,15 +3,14 @@
   "name": "Auto Refresh Extension",
   "version": "1.0",
   "permissions": ["storage", "tabs", "activeTab"],
+  "icons": {
+    "128": "icon.png"
+  },  
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_title": "Refresh Page",
-    "default_icon": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
-    }
+    "default_icon": "icon.png"
   }
 }
