@@ -7,10 +7,12 @@ chrome.action.onClicked.addListener(async (tab) => {
   if (activeUrl === url) {
     stopRefreshing();
     await clearData();
-    chrome.action.setBadgeText({ text: "" });
+    chrome.action.setBadgeBackgroundColor({ color: "#FF0000" }); // Set badge color to red
+    chrome.action.setBadgeText({ text: "Off" });
   } else {
     await saveUrl(url);
     startRefreshing(tab.id);
+    chrome.action.setBadgeBackgroundColor({ color: "#00FF00" }); // Set badge color to green
     chrome.action.setBadgeText({ text: "On" });
   }
 });
@@ -19,7 +21,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url !== activeUrl) {
     stopRefreshing();
     await clearData();
-    chrome.action.setBadgeText({ text: "" });
+    chrome.action.setBadgeBackgroundColor({ color: "#FF0000" }); // Set badge color to red
+    chrome.action.setBadgeText({ text: "Off" });
   }
 });
 
