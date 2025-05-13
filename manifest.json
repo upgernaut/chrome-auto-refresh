@@ -3,6 +3,7 @@
   "name": "Auto Refresh Extension",
   "version": "1.0",
   "permissions": ["storage", "tabs"],
+  "options_page": "options.html",
   "host_permissions": ["<all_urls>"],
   "icons": {
     "128": "icon.png"

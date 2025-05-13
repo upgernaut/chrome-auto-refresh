@@ -26,15 +26,35 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
   }
 });
 
+// Set default refresh interval if not already set
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.get(['refreshInterval'], (data) => {
+    if (data.refreshInterval === undefined) {
+      chrome.storage.local.set({ refreshInterval: 2000 }); // default 4 seconds
+    }
+  });
+});
+
+
 function startRefreshing(tabId) {
   if (activeTabs[tabId] && activeTabs[tabId].interval) return;
 
-  const interval = setInterval(() => {
-    chrome.tabs.reload(tabId);
-  }, 2000);
+  // Always fetch the latest value
+  chrome.storage.local.get('refreshInterval', (data) => {
+    const intervalMs = parseInt(data.refreshInterval) || 2000;
 
-  activeTabs[tabId] = { interval, url: activeTabs[tabId] ? activeTabs[tabId].url : null };
+    const interval = setInterval(() => {
+      chrome.tabs.reload(tabId);
+    }, intervalMs);
+
+    activeTabs[tabId] = {
+      interval,
+      url: activeTabs[tabId] ? activeTabs[tabId].url : null
+    };
+  });
 }
+
+
 
 function stopRefreshing(tabId) {
   if (activeTabs[tabId] && activeTabs[tabId].interval) {
@@ -42,6 +62,8 @@ function stopRefreshing(tabId) {
     delete activeTabs[tabId];
   }
 }
+
+
 
 async function saveUrl(tabId, url) {
   activeTabs[tabId] = { interval: activeTabs[tabId] ? activeTabs[tabId].interval : null, url };
@@ -64,3 +86,4 @@ function updateBadge(tabId, isOn) {
     chrome.action.setBadgeText({ text: "Off" });
   }
 }
+
